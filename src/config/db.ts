@@ -3,7 +3,7 @@ import { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME, DB_LOGGING } from '../
 import { User } from '../entity/user';
 
 export const dbOptions: ConnectionOptions = {
-    type: 'postgres', //mysql
+    type: 'mysql',
     host: DB_HOST,
     port: DB_PORT,
     username: DB_USER,
