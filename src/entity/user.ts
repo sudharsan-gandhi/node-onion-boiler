@@ -1,10 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, ManyToMany, JoinTable, ObjectID, ObjectIdColumn } from 'typeorm';
 
 @Entity('User')
 export class User {
 
-    @PrimaryGeneratedColumn()
-    public id: number;
+    @ObjectIdColumn()
+    _id: ObjectID;
 
     @Column()
     public name: string;
