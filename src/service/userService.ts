@@ -3,6 +3,7 @@ import Types from '../config/types';
 import { NotFound, Conflict } from '../utils/exceptions';
 import { User } from '../entity/user';
 import { UserRepository } from '../repository/userRepository';
+import { Resolver, Query, Mutation, Arg } from 'type-graphql';
 
 
 export interface UserService {
@@ -12,23 +13,27 @@ export interface UserService {
 }
 
 @injectable()
+@Resolver()
 export class UserServiceImp implements UserService {
 
     constructor(
         @inject(Types.UserRepository) private userRepository: UserRepository
     ) {}
 
+    @Query(() => [User])
     public async getAll(): Promise<User[]> {
         return await this.userRepository.findAll();
     }
 
+    @Query(() => User)
     public async getById(id: string): Promise<User> {
         const vehicle = await this.userRepository.findById(id);
         if (vehicle !== undefined) return vehicle;
-        throw new NotFound('cant find tu madre');
+        throw new NotFound('cannot find user');
     }
 
-    public async save(name: string): Promise<string> {
+    @Mutation(() => User)
+    public async save(@Arg('name') name: string): Promise<string> {
         const created = await this.userRepository.save({ name });
         if (created) return 'User created successfully';
         throw new Conflict('Cant create new user');

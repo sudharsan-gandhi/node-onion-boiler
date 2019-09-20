@@ -15,17 +15,19 @@ import { logger } from './utils/logger';
 import { NotFound, BadRequest, Unauthorize, Conflict } from './utils/exceptions';
 import { notFoundResponse, badRequestResponse, unauthorizeResponse, conflictResponse, internalResponse } from './utils/response';
 import { ENVIRONMENT } from './utils/secrets';
+import { ApolloServer } from 'apollo-server-express';
+import { buildSchema } from 'type-graphql';
 
 export default class App {
 
     private async init() {
 
         await createConnection(dbOptions).then(async connection => {
-            console.log(connection);
-            console.log('Here you can setup and run express/koa/any other framework.');
+            console.log('connected');
         }).catch(error => console.log('dberror', error));
 
         const app: Application = express();
+
         app.set('port', process.env.PORT || 3000);
 
         app.use(errorHandler());
@@ -55,7 +57,17 @@ export default class App {
             }
             return internalResponse(res);
         });
+        const schema = await buildSchema({
+            resolvers: [__dirname + '/service/*.*']
+          });
 
+        const server = new ApolloServer({
+            schema,
+            playground: true,
+          });
+
+        server.applyMiddleware({ app });
+        console.log('graphql path', server.graphqlPath);
         return Promise.resolve(app);
     }
 
