@@ -6,9 +6,7 @@ import errorHandler from 'errorhandler';
 import morgan from 'morgan';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { container } from './config/inversify';
-import { RegistrableController } from './controller/RegistrableController';
-import Types from './config/types';
+// import Types from './config/types';
 import { createConnection } from 'typeorm';
 import { dbOptions } from './config/db';
 import { logger } from './utils/logger';
@@ -17,6 +15,7 @@ import { notFoundResponse, badRequestResponse, unauthorizeResponse, conflictResp
 import { ENVIRONMENT } from './utils/secrets';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
+import * as GraphqlLocal from './graphql';
 
 export default class App {
 
@@ -38,8 +37,8 @@ export default class App {
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
 
-        const controllers: RegistrableController[] = container.getAll<RegistrableController>(Types.Controller);
-        controllers.forEach(controller => controller.register(app));
+        // const controllers: RegistrableController[] = container.getAll<RegistrableController>(Types.Controller);
+        // controllers.forEach(controller => controller.register(app));
 
         app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
             logger.error(err.stack);
@@ -58,12 +57,14 @@ export default class App {
             return internalResponse(res);
         });
         const schema = await buildSchema({
-            resolvers: [__dirname + '/service/*.*']
+            resolvers: GraphqlLocal.resolvers
+            // resolvers: [__dirname + '/graphql/*/*.resolver.js'],
+            // emitSchemaFile: true
           });
 
         const server = new ApolloServer({
             schema,
-            playground: true,
+            playground: true
           });
 
         server.applyMiddleware({ app });

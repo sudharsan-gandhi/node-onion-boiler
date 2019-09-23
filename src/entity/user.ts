@@ -1,11 +1,11 @@
-import { Entity, Column, ManyToMany, JoinTable, ObjectID, ObjectIdColumn } from 'typeorm';
+import { Entity, Column, ManyToMany, JoinTable, ObjectID, ObjectIdColumn, BaseEntity } from 'typeorm';
 import { ObjectType, Field, ID } from 'type-graphql';
 
 @ObjectType()
 @Entity('User')
-export class User {
+export class User extends BaseEntity {
 
-    @Field(type => ID)
+    @Field(() => ID)
     @ObjectIdColumn()
     _id: ObjectID;
 
