@@ -1,11 +1,14 @@
 {
     "configurations": [
         {
+            "name": "Current TS File",
             "type": "node",
-            "request": "attach",
-            "name": "Attach by Process ID",
-            "processId": "${command:PickProcess}",
-            "protocol": "inspector"
+            "request": "launch",
+            "args": ["src/server.ts"],
+            "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+            "sourceMaps": true,
+            "cwd": "${workspaceRoot}",
+            "protocol": "inspector",
         }
     ]
 }
