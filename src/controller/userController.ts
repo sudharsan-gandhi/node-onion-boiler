@@ -16,7 +16,7 @@ export class UserController implements RegistrableController {
     public register(app: Application): void {
         app.post('/register', async (req: Request, res: Response, next: NextFunction) => {
             try {
-                if (req.body && req.body.name && req.body.password) {
+                if (req.body && req.body.name && req.body.email && req.body.password) {
                     console.log('req body:', req.body);
                     const password = req.body.password;
                     const passwordhash = hashSync(password, process.env.password_key);
@@ -34,6 +34,20 @@ export class UserController implements RegistrableController {
                 return next(error);
             }
         });
+
+        app.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                if (req.body && req.body.email && req.body.password) {
+                    const user = await this.userService.getByEmail(req.body.email);
+                } else {
+                    throw new BadRequest('login failed: user details missing');
+                }
+            } catch (error) {
+                return next(error);
+            }
+
+        })
+
         app.route('/user/all')
             .get(async (req: Request, res: Response, next: NextFunction) => {
                 try {
@@ -55,16 +69,16 @@ export class UserController implements RegistrableController {
                 }
             });
 
-        app.route('/user/create/:name')
-            .get(async (req: Request, res: Response, next: NextFunction) => {
-                try {
-                    const name = req.params.name;
-                    const result = await this.userService.save(name);
-                    return dataResponse(res, result);
-                } catch (error) {
-                    return next(error);
-                }
-            });
+        // app.route('/user/create/:name')
+        //     .get(async (req: Request, res: Response, next: NextFunction) => {
+        //         try {
+        //             const name = req.params.name;
+        //             const result = await this.userService.save(name);
+        //             return dataResponse(res, result);
+        //         } catch (error) {
+        //             return next(error);
+        //         }
+        //     });
 
         // app.route('/user/:userId/vehicle/:vehicleId')
         //     .get(async (req: Request, res: Response, next: NextFunction) => {

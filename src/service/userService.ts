@@ -3,12 +3,14 @@ import Types from '../config/types';
 import { NotFound, Conflict } from '../utils/exceptions';
 import { User, UserInterface } from '../entity/user';
 import { UserRepository } from '../repository/userRepository';
+import { Not } from 'typeorm';
 
 
 export interface UserService {
     getAll(): Promise<User[]>;
     getById(id: string): Promise<User>;
     save(user: UserInterface): Promise<User>;
+    getByEmail(email: string): Promise<User>;
 }
 
 @injectable()
@@ -23,9 +25,9 @@ export class UserServiceImp implements UserService {
     }
 
     public async getById(id: string): Promise<User> {
-        const vehicle = await this.userRepository.findById(id);
-        if (vehicle !== undefined) return vehicle;
-        throw new NotFound('cant find tu madre');
+        const user = await this.userRepository.findById(id);
+        if (user !== undefined) return user;
+        throw new NotFound('cant find the user');
     }
 
     public async save(user: UserInterface): Promise<User> {
@@ -34,17 +36,23 @@ export class UserServiceImp implements UserService {
         throw new Conflict('Cant create new user');
     }
 
-    // public async newVehicle(userId: string, vehicleId: string): Promise<string> {
+    public async getByEmail(email: string): Promise<User> {
+        const user = await this.userRepository.findBOneByFieldName("email", email)
+        if(!!user) return user;
+        throw new NotFound('No user found');
+    }
+
+    // public async newuser(userId: string, userId: string): Promise<string> {
     //     const user = await this.userRepository.findById(userId);
     //     if (user !== undefined) {
-    //         const vehicle = await this.vehicleRepository.findById(vehicleId);
-    //         if (vehicle !== undefined) {
-    //             user.vehicles.push(vehicle);
+    //         const user = await this.userRepository.findById(userId);
+    //         if (user !== undefined) {
+    //             user.users.push(user);
     //             console.log(user);
     //             await this.userRepository.save(user);
-    //             return 'Vehicle added successfully';
+    //             return 'user added successfully';
     //         } else {
-    //             throw new NotFound('Cant find vehicles with that id');
+    //             throw new NotFound('Cant find users with that id');
     //         }
     //     } else {
     //         throw new NotFound('Cant find user with that id');

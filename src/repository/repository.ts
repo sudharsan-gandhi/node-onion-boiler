@@ -13,6 +13,8 @@ export interface Repository<T> {
     update(id: string, item: T): Promise<boolean>;
     save(data: T): Promise<T>;
     delete(id: string): Promise<boolean>;
+    findByFieldName(fieldName: string, fieldValue: string): Promise<T>;
+    findOneByFieldName(fieldName: string, fieldValue: string): Promise<T>
 }
 
 @injectable()
@@ -53,6 +55,16 @@ export abstract class GenericRepositoryImp<TEntity> implements Repository<TEntit
     public async save<U>(data: U): Promise<TEntity> {
         const result = await this.repository.save(data);
         return result;
+    }
+
+    public async findByFieldName(fieldName: string, fieldValue: string): Promise<TEntity> {
+        const result = await this.repository.createQueryBuilder().where(`${fieldName} = :value`).setParameter("value",fieldValue ).execute()
+        return result;
+    }
+
+    public async findOneByFieldName(fieldName: string, fieldValue: string): Promise<TEntity> {
+        const result = await this.repository.createQueryBuilder().where(`${fieldName} = :value`).setParameter("value",fieldValue ).execute()
+        return result[0] || result;
     }
 
 }
