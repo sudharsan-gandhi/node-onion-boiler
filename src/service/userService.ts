@@ -37,7 +37,7 @@ export class UserServiceImp implements UserService {
     }
 
     public async getByEmail(email: string): Promise<User> {
-        const user = await this.userRepository.findBOneByFieldName("email", email)
+        const user = await this.userRepository.findOneByFieldName("email", email)
         if(!!user) return user;
         throw new NotFound('No user found');
     }
