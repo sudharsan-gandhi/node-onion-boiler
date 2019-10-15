@@ -40,3 +40,11 @@ export const LOGGING_ERROR_PATH = process.env.LOGGING_ERROR_PATH;
 export const LOGGING_EXCEPTION_PATH = process.env.LOGGING_EXCEPTION_PATH;
 export const LOGGING_LEVEL_CONSOLE = process.env.LOGGING_LEVEL_CONSOLE;
 export const LOGGING_LEVEL_FILE = process.env.LOGGING_LEVEL_FILE;
+
+
+/*
+** Secret keys
+*/
+
+export const secret = process.env.secret =  'My_$e(ret_re(!pE';
+export const password_key = process.env.password_key = 'My_$e(ret_re(!pE';

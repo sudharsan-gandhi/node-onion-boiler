@@ -11,7 +11,7 @@ export interface Repository<T> {
     findManyById(ids: string[]): Promise<T[]>;
     findByQuery(query?: Query<T>): Promise<T[]>;
     update(id: string, item: T): Promise<boolean>;
-    save(data: T): Promise<boolean>;
+    save(data: T): Promise<T>;
     delete(id: string): Promise<boolean>;
 }
 
@@ -50,9 +50,9 @@ export abstract class GenericRepositoryImp<TEntity> implements Repository<TEntit
         return !!result;
     }
 
-    public async save(data: any): Promise<boolean> {
+    public async save<U>(data: U): Promise<TEntity> {
         const result = await this.repository.save(data);
-        return !!result;
+        return result;
     }
 
 }

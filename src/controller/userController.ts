@@ -4,6 +4,8 @@ import { injectable, inject } from 'inversify';
 import { dataResponse } from '../utils/response';
 import Types from '../config/types';
 import { UserService } from '../service/userService';
+import { BadRequest } from '../utils/exceptions';
+import { hashSync, compareSync } from 'bcrypt';
 
 @injectable()
 export class UserController implements RegistrableController {
@@ -12,6 +14,26 @@ export class UserController implements RegistrableController {
     private userService: UserService;
 
     public register(app: Application): void {
+        app.post('/register', async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                if (req.body && req.body.name && req.body.password) {
+                    console.log('req body:', req.body);
+                    const password = req.body.password;
+                    const passwordhash = hashSync(password, process.env.password_key);
+                    const user = {
+                        password: passwordhash,
+                        name: req.body.name,
+                        email: req.body.email
+                    };
+                    const result = await this.userService.save(user);
+                    return dataResponse(res, result);
+                } else {
+                    throw new BadRequest('Registration failed: user details missing');
+                }
+            } catch (error) {
+                return next(error);
+            }
+        });
         app.route('/user/all')
             .get(async (req: Request, res: Response, next: NextFunction) => {
                 try {

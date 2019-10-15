@@ -1,14 +1,14 @@
 import { injectable, inject } from 'inversify';
 import Types from '../config/types';
 import { NotFound, Conflict } from '../utils/exceptions';
-import { User } from '../entity/user';
+import { User, UserInterface } from '../entity/user';
 import { UserRepository } from '../repository/userRepository';
 
 
 export interface UserService {
     getAll(): Promise<User[]>;
     getById(id: string): Promise<User>;
-    save(name: string): Promise<string>;
+    save(user: UserInterface): Promise<User>;
 }
 
 @injectable()
@@ -28,9 +28,9 @@ export class UserServiceImp implements UserService {
         throw new NotFound('cant find tu madre');
     }
 
-    public async save(name: string): Promise<string> {
-        const created = await this.userRepository.save({ name });
-        if (created) return 'User created successfully';
+    public async save(user: UserInterface): Promise<User> {
+        const createdUser = await this.userRepository.save({ name });
+        if (!!createdUser) return createdUser;
         throw new Conflict('Cant create new user');
     }
 
