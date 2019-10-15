@@ -13,5 +13,5 @@ export const dbOptions: ConnectionOptions = {
         User
     ],
     logging: DB_LOGGING,
-    synchronize: false
+    synchronize: true
 };
