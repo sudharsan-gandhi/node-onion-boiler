@@ -5,7 +5,6 @@ import { dataResponse } from '../utils/response';
 import Types from '../config/types';
 import { UserService } from '../service/userService';
 import { BadRequest } from '../utils/exceptions';
-import { hashSync, compareSync } from 'bcrypt';
 
 @injectable()
 export class UserController implements RegistrableController {
@@ -18,10 +17,8 @@ export class UserController implements RegistrableController {
             try {
                 if (req.body && req.body.name && req.body.email && req.body.password) {
                     console.log('req body:', req.body);
-                    const password = req.body.password;
-                    const passwordhash = hashSync(password, process.env.password_key);
                     const user = {
-                        password: passwordhash,
+                        password: req.body.password,
                         name: req.body.name,
                         email: req.body.email
                     };
