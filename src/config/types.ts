@@ -4,7 +4,9 @@ const Types = {
 
     UserRepository: Symbol('UserRepository'),
 
-    UserService: Symbol('UserService')
+    UserService: Symbol('UserService'),
+
+    Repl: Symbol('Repl')
 
 };
 

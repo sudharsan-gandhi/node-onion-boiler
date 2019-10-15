@@ -15,14 +15,15 @@ import { logger } from './utils/logger';
 import { NotFound, BadRequest, Unauthorize, Conflict } from './utils/exceptions';
 import { notFoundResponse, badRequestResponse, unauthorizeResponse, conflictResponse, internalResponse } from './utils/response';
 import { ENVIRONMENT } from './utils/secrets';
+import ReplServer from './console';
 
 export default class App {
 
     private async init() {
 
         await createConnection(dbOptions).then(async connection => {
-            console.log(connection);
-            console.log('Here you can setup and run express/koa/any other framework.');
+            // console.log(connection);
+            console.log('database connection Successful');
         }).catch(error => console.log('dberror', error));
 
         const app: Application = express();
@@ -55,6 +56,8 @@ export default class App {
             }
             return internalResponse(res);
         });
+
+        new ReplServer();
 
         return Promise.resolve(app);
     }

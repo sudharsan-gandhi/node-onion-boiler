@@ -3,7 +3,6 @@ import Types from '../config/types';
 import { NotFound, Conflict } from '../utils/exceptions';
 import { User, UserInterface } from '../entity/user';
 import { UserRepository } from '../repository/userRepository';
-import { Not } from 'typeorm';
 
 
 export interface UserService {
@@ -31,7 +30,7 @@ export class UserServiceImp implements UserService {
     }
 
     public async save(user: UserInterface): Promise<User> {
-        const createdUser = await this.userRepository.save({ name });
+        const createdUser = await this.userRepository.save(user);
         if (!!createdUser) return createdUser;
         throw new Conflict('Cant create new user');
     }

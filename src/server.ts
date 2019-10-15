@@ -21,4 +21,4 @@ process.on('unhandledRejection', (err: Error) => {
 
 const app: App = new App();
 app.start();
-module.exports = app;
+export default app;
