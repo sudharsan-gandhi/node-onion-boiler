@@ -5,6 +5,7 @@
         "target": "es2018",
         "noImplicitAny": true,
         "moduleResolution": "node",
+        "resolveJsonModule": true,
         "sourceMap": true,
         "outDir": "dist",
         "baseUrl": ".",
@@ -15,7 +16,8 @@
             ]
         },
         "types": [
-            "reflect-metadata"
+            "reflect-metadata",
+            "node"
         ],
         "typeRoots": [
             "node_modules/@types"

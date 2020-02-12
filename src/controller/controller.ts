@@ -1,5 +1,5 @@
 import { Application } from 'express';
 
-export interface RegistrableController {
+export interface Controller {
     register(app: Application): void;
 }

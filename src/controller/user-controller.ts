@@ -1,13 +1,13 @@
-import { RegistrableController } from './RegistrableController';
+import { Controller } from './controller';
 import { Application, Request, NextFunction, Response } from 'express';
 import { injectable, inject } from 'inversify';
 import { dataResponse } from '../utils/response';
 import Types from '../config/types';
-import { UserService } from '../service/userService';
+import { UserService } from '../service/user-service';
 import { BadRequest } from '../utils/exceptions';
 
 @injectable()
-export class UserController implements RegistrableController {
+export class UserController implements Controller {
 
     @inject(Types.UserService)
     private userService: UserService;
@@ -43,7 +43,7 @@ export class UserController implements RegistrableController {
                 return next(error);
             }
 
-        })
+        });
 
         app.route('/user/all')
             .get(async (req: Request, res: Response, next: NextFunction) => {

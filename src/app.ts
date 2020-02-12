@@ -7,7 +7,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { container } from './config/inversify';
-import { RegistrableController } from './controller/RegistrableController';
+import { Controller } from './controller/controller';
 import Types from './config/types';
 import { createConnection } from 'typeorm';
 import { dbOptions } from './config/db';
@@ -37,7 +37,7 @@ export default class App {
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
 
-        const controllers: RegistrableController[] = container.getAll<RegistrableController>(Types.Controller);
+        const controllers: Controller[] = container.getAll<Controller>(Types.Controller);
         controllers.forEach(controller => controller.register(app));
 
         app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

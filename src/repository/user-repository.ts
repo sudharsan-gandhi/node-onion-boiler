@@ -12,7 +12,7 @@ export class UserRepository extends GenericRepositoryImp<User> {
     }
 
     public async save(data: UserInterface): Promise<User> {
-            data.password = generatePasswordHash(data.password)
+            data.password = generatePasswordHash(data.password);
             const result = await super.save(data);
             delete result.password;
             return result;

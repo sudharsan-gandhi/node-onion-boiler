@@ -25,14 +25,14 @@ export default class ReplServer {
       // FUTURE: Potentially use custom `eval` as stopgap for `await` support in Node <v9
       // https://nodejs.org/api/repl.html#repl_repl_start_options
       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    })
+    });
     this.server = server;
     const repositories = container.getAll(Types.Repl);
     console.log('available models/n');
     repositories.forEach(repository => {
-      let name = repository.constructor.name;
-      console.log(name, '/n')
+      const name = repository.constructor.name;
+      console.log(name, '/n');
       this.server.context[name] = repository;
-    })
+    });
   }
 }

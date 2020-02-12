@@ -2,7 +2,7 @@ import { injectable, inject } from 'inversify';
 import Types from '../config/types';
 import { NotFound, Conflict } from '../utils/exceptions';
 import { User, UserInterface } from '../entity/user';
-import { UserRepository } from '../repository/userRepository';
+import { UserRepository } from '../repository/user-repository';
 
 
 export interface UserService {
@@ -36,26 +36,9 @@ export class UserServiceImp implements UserService {
     }
 
     public async getByEmail(email: string): Promise<User> {
-        const user = await this.userRepository.findOneByFieldName("email", email)
-        if(!!user) return user;
+        const user = await this.userRepository.findByQuery({ where: { email }, take: 1 });
+        if (!!user && user.length > 0) return user[0];
         throw new NotFound('No user found');
     }
-
-    // public async newuser(userId: string, userId: string): Promise<string> {
-    //     const user = await this.userRepository.findById(userId);
-    //     if (user !== undefined) {
-    //         const user = await this.userRepository.findById(userId);
-    //         if (user !== undefined) {
-    //             user.users.push(user);
-    //             console.log(user);
-    //             await this.userRepository.save(user);
-    //             return 'user added successfully';
-    //         } else {
-    //             throw new NotFound('Cant find users with that id');
-    //         }
-    //     } else {
-    //         throw new NotFound('Cant find user with that id');
-    //     }
-    // }
 
 }

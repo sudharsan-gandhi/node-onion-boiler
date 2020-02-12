@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
-
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { validateOrReject } from 'class-validator';
 export interface UserInterface {
     id?: number;
     name: string;
@@ -25,5 +25,12 @@ export class User {
     // @ManyToMany(type => Vehicle, { eager: true })
     // @JoinTable()
     // public vehicles: Vehicle[];
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    async validate() {
+        // check class-validator plugin documentation and add possible object validations
+        await validateOrReject(this);
+    }
 
 }
